@@ -13,6 +13,4 @@ public class Main {
     }
 }
 
-//TODO find average wait time
-// find average queue length
-// log normal
+//TODO fix the avg wait time&queue length thing
