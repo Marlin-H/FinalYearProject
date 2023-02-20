@@ -1,0 +1,83 @@
+import java.util.LinkedList;
+
+public class OS {
+    private int clock = 0;
+    private final Scheduler scheduler;
+    private final Distribution distribution;
+    LinkedList<Job> waiting = new LinkedList<Job>();
+
+
+
+    public OS(Scheduler scheduler, Distribution distribution) {
+        this.scheduler = scheduler;
+        this.distribution = distribution;
+    }
+
+    public void run() throws InterruptedException {
+        while (clock < 10000){
+            clock++;
+            waiting.add(distribution.next());
+            Job current = waiting.get(0);
+            scheduler.service(current);
+            if(current.getTimeRemaining() == 0){
+                waiting.remove(current);
+            }
+            System.out.println(waiting);
+            Thread.sleep(1000);
+        }
+    }
+
+
+//    This should just serve as a kind of template:
+//    public void FCFS() {
+//        while (!waiting.isEmpty()) {
+//            printDetails();
+//            Job currentJob = takeNextFromQueue();
+//            int executionTime = currentJob.getTimeRemaining();
+//            clock.tick(executionTime);
+//            currentJob.decreaseTimeRemaining(executionTime);
+//            currentJob.increaseTimeExecuted(executionTime);
+//            finished(currentJob);
+//        }
+//        printDetails();
+//    }
+
+//    public void RoundRobin(int quantum) {
+//        printDetails();
+//
+//        while (!waiting.isEmpty()) {
+//            Job currentJob = takeNextFromQueue();
+//            int cpu_time = currentJob.getTimeRemaining();
+//            if (cpu_time < quantum) {
+//                currentJob.setTimeRemaining(0);
+//                clock.tick(cpu_time);
+//                finished(currentJob);
+//            } else {
+//                currentJob.decreaseTimeRemaining(quantum);
+//                addToQueue(currentJob);
+//                clock.tick(quantum);
+//            }
+//            printDetails();
+//
+//        }
+//    }
+
+    private void printDetails() {
+        System.out.println("Waiting: " + waiting);
+        System.out.println("Clock: " + clock);
+        System.out.println();
+    }
+
+    public void addToQueue(Job job) {
+        waiting.addLast(job);
+    }
+
+//    public Job takeNextFromQueue() {
+//        Job next = waiting.removeFirst();
+//        if (next.getTimeRemaining() == 0) {
+//            finished.addLast(next);
+//        }
+//        return next;
+//    }
+
+}
